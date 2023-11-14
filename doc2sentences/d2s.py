@@ -1,5 +1,5 @@
 import argparse
-import doc2sentences as d2s
+import lib as d2s
 
 
 def main():

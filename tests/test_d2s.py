@@ -1,6 +1,6 @@
 """Tests for the doc2sentences.my_module module."""
 import pytest
-import doc2sentences.doc2sentences as d2s
+import doc2sentences.lib as d2s
 
 
 def test_good_pdf():

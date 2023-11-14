@@ -1,31 +1,3 @@
-## Badges
-
-(Customize these badges with your own links, and check https://shields.io/ or https://badgen.net/ to see which other badges are available.)
-
-| fair-software.eu recommendations | |
-| :-- | :--  |
-| (1/5) code repository              | [![github repo badge](https://img.shields.io/badge/github-repo-000.svg?logo=github&labelColor=gray&color=blue)](https://github.com/backdem/doc2sentences) |
-| (2/5) license                      | [![github license badge](https://img.shields.io/github/license/backdem/doc2sentences)](https://github.com/backdem/doc2sentences) |
-| (3/5) community registry           | [![RSD](https://img.shields.io/badge/rsd-doc2sentences-00a3e3.svg)](https://www.research-software.nl/software/doc2sentences) [![workflow pypi badge](https://img.shields.io/pypi/v/doc2sentences.svg?colorB=blue)](https://pypi.python.org/project/doc2sentences/) |
-| (4/5) citation                     | [![DOI](https://zenodo.org/badge/DOI/<replace-with-created-DOI>.svg)](https://doi.org/<replace-with-created-DOI>) |
-| (5/5) checklist                    | [![workflow cii badge](https://bestpractices.coreinfrastructure.org/projects/<replace-with-created-project-identifier>/badge)](https://bestpractices.coreinfrastructure.org/projects/<replace-with-created-project-identifier>) |
-| howfairis                          | [![fair-software badge](https://img.shields.io/badge/fair--software.eu-%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8B-yellow)](https://fair-software.eu) |
-| **Other best practices**           | &nbsp; |
-| Static analysis                    | [![workflow scq badge](https://sonarcloud.io/api/project_badges/measure?project=backdem_doc2sentences&metric=alert_status)](https://sonarcloud.io/dashboard?id=backdem_doc2sentences) |
-| Coverage                           | [![workflow scc badge](https://sonarcloud.io/api/project_badges/measure?project=backdem_doc2sentences&metric=coverage)](https://sonarcloud.io/dashboard?id=backdem_doc2sentences) |
-| Documentation                      | [![Documentation Status](https://readthedocs.org/projects/doc2sentences/badge/?version=latest)](https://doc2sentences.readthedocs.io/en/latest/?badge=latest) |
-| **GitHub Actions**                 | &nbsp; |
-| Build                              | [![build](https://github.com/backdem/doc2sentences/actions/workflows/build.yml/badge.svg)](https://github.com/backdem/doc2sentences/actions/workflows/build.yml) |
-| Citation data consistency          | [![cffconvert](https://github.com/backdem/doc2sentences/actions/workflows/cffconvert.yml/badge.svg)](https://github.com/backdem/doc2sentences/actions/workflows/cffconvert.yml) |
-| SonarCloud                         | [![sonarcloud](https://github.com/backdem/doc2sentences/actions/workflows/sonarcloud.yml/badge.svg)](https://github.com/backdem/doc2sentences/actions/workflows/sonarcloud.yml) |
-| MarkDown link checker              | [![markdown-link-check](https://github.com/backdem/doc2sentences/actions/workflows/markdown-link-check.yml/badge.svg)](https://github.com/backdem/doc2sentences/actions/workflows/markdown-link-check.yml) |
-
-## How to use doc2sentences
-
-Convert docs to sentences
-
-The project setup is documented in [project_setup.md](project_setup.md). Feel free to remove this document (and/or the link to this document) if you don't need it.
-
 ## Installation
 
 To install doc2sentences from GitHub repository, do:
