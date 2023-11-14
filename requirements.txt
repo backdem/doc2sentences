@@ -1,0 +1,7 @@
+chardet==4.0.0
+langid==1.1.6
+nltk==3.7
+PyMuPDF==1.22.0
+pytest==7.1.2
+spacy==3.5.4
+striprtf==0.0.22

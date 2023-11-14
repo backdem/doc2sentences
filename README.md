@@ -7,6 +7,7 @@ To install and use from cli
 ```console
 git clone git@github.com:backdem/doc2sentences.git
 cd doc2sentences
+pip install -r requirments.txt
 ```
 
 ## To use the script
