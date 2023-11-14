@@ -116,7 +116,7 @@ def detect_encoding(file_path):
     return detector.result['encoding']
 
 
-def get_sentences(text, min_len=5, lang='en'):
+def get_sentences(text, min_len=5, lang='en', split_lists=False):
     text = text.replace('e.g.', 'eeggee')
     text = text.replace('e. g.', 'eeggee')
     text = text.replace('i. e.', 'iieeii')
@@ -137,9 +137,14 @@ def get_sentences(text, min_len=5, lang='en'):
     sentences = []
     for line in text.splitlines():
         ss = nltk.sent_tokenize(line)
-        for s in ss:
-            sub_sentences = split_itemized_sentence(s)
-            sentences += sub_sentences
+        if split_lists:
+            # Attempt to split itemized lists into sentences.
+            # N.B. might be quite error prone.
+            for s in ss:
+                sub_sentences = split_itemized_sentence(s)
+                sentences += sub_sentences
+        else:
+            sentences += ss
     for i in range(len(sentences)):
         sentences[i] = sentences[i].replace('eeggee', 'e.g.')
         sentences[i] = sentences[i].replace('iieeii', 'i.e.')
