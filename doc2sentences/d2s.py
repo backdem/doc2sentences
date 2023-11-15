@@ -44,7 +44,8 @@ def main():
         print(f'[error] text from {file_path} does not seem to be language {args.language}')
         return
 
-    sentences = d2s.get_sentences(text)
+    sentences = d2s.get_sentences(text, min_len=5, lang='en', backend='spacy')
+
     columns = []
     if args.columns:
         columns = args.columns.split(',')

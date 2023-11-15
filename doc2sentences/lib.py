@@ -5,6 +5,7 @@ import nltk
 import datetime
 import re
 import spacy
+from spacy.lang.en import English
 import langid
 from striprtf.striprtf import rtf_to_text
 import chardet
@@ -115,8 +116,41 @@ def detect_encoding(file_path):
         detector.close()
     return detector.result['encoding']
 
+def get_sentences_spacy(text, min_len=5, lang='en'):
+    nlp = English()
+    nlp.add_pipe('sentencizer')
+    text = text.replace('e.g.', 'eeggee')
+    text = text.replace('e. g.', 'eeggee')
+    text = text.replace('i. e.', 'iieeii')
+    text = text.replace('i.e.', 'iieeii')
+    text = text.replace('\n', ' ').replace('\r', '')
+    doc = nlp(text)
+    def filter(s, min_len, lang):
+        if len(s.split(' ')) < min_len:
+            return False
+        if not isLanguage(s, lang):
+            return False
+        return True
 
-def get_sentences(text, min_len=5, lang='en', split_lists=False):
+    def transform(s):
+        s = re.sub(r'[^\w\s\-.!:;,?()]', ' ', s)
+        s = s.replace('eeggee', 'e.g.')
+        s = s.replace('iieeii', 'i.e.')
+        return re.sub(r'\s+', ' ', s).strip().lower()
+
+    sentences = [transform(s.text) for s in doc.sents if filter(s.text.strip(), min_len, lang)]
+    return sentences
+
+def get_sentences(text, min_len=5, lang='en', backend='spacy'):
+    if not lang == 'en':
+        raise Exception('Only english supported at the moment.')
+    if backend == 'spacy':
+        return get_sentences_spacy(text, min_len, lang)
+    if backend == 'nltk':
+        return get_sentences_nltk(text, min_len, lang)
+    raise Exception(f'Backend {backend} not supported.')
+
+def get_sentences_nltk(text, min_len=5, lang='en', split_lists=False):
     text = text.replace('e.g.', 'eeggee')
     text = text.replace('e. g.', 'eeggee')
     text = text.replace('i. e.', 'iieeii')
@@ -132,6 +166,8 @@ def get_sentences(text, min_len=5, lang='en', split_lists=False):
 
     def transform(s):
         s = re.sub(r'[^\w\s\-.!:;,?()]', ' ', s)
+        s = s.replace('eeggee', 'e.g.')
+        s = s.replace('iieeii', 'i.e.')
         return re.sub(r'\s+', ' ', s).strip().lower()
 
     sentences = []
@@ -145,12 +181,12 @@ def get_sentences(text, min_len=5, lang='en', split_lists=False):
                 sentences += sub_sentences
         else:
             sentences += ss
-    for i in range(len(sentences)):
-        sentences[i] = sentences[i].replace('eeggee', 'e.g.')
-        sentences[i] = sentences[i].replace('iieeii', 'i.e.')
-    sentences = [transform(s) for s in sentences if filter(s, min_len, lang)]
+    sentences = [transform(s) for s in sentences if filter(s.strip(), min_len, lang)]
     return sentences
 
+def isItemized(text):
+    list_pattern = re.compile(r'(?:\d+\.|[IVX]+[.)]|[ivx]+[.)]|\([a-z]\)|\s*[a-z]\))')
+    return bool(list_pattern.match(text))
 
 def split_itemized_sentence(text):
     def filter(s):
