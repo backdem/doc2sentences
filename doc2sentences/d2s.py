@@ -31,6 +31,9 @@ def main():
     text = ""
     if file_type == '.pdf':
         text = d2s.get_pdf_text(file_path)
+        # Some PDFs need OCR to extract text. It is costly so we only do when normal routine fails
+        if not d2s.isLanguage(text):
+            text = d2s.get_pdf_txt_ocr(file_path)
     if file_type == '.txt':
         encoding = d2s.detect_encoding(file_path)
         text = d2s.get_txt_text(file_path, encoding)

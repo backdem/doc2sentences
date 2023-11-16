@@ -1,6 +1,9 @@
 import os
 import csv
 import fitz as PyMuPDF
+from PIL import Image
+import pytesseract
+from language_tool_python import LanguageTool
 import nltk
 import datetime
 import re
@@ -68,6 +71,42 @@ def isLanguage(text, lang="en"):
     return False
 
 
+def get_pdf_txt_ocr(file_path):
+
+    def fix_english_errors_with_languagetool(text):
+        tool = LanguageTool('en-UK')
+        matches = tool.check(text)
+        return tool.correct(text)
+
+    def pdf_to_images(file_path):
+        doc = PyMuPDF.open(file_path)
+        images = []
+
+        for page_number in range(doc.page_count):
+            page = doc[page_number]
+            pix = page.get_pixmap()
+            img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+            images.append(img)
+
+        return images
+
+    def ocr_image(image):
+        text = pytesseract.image_to_string(image)
+        return text
+
+    images = pdf_to_images(file_path)
+
+    parsed_text = ""
+    for image in images:
+        text = ocr_image(image)
+        parsed_text += text + "\n"
+
+    # Fix language errors assuming UK English
+    fixed_text = fix_english_errors_with_languagetool(parsed_text)
+
+    return fixed_text
+
+
 def get_pdf_text(file_path) -> str:
     text = ''
     with PyMuPDF.open(file_path) as doc:
@@ -116,6 +155,7 @@ def detect_encoding(file_path):
         detector.close()
     return detector.result['encoding']
 
+
 def get_sentences_spacy(text, min_len=5, lang='en'):
     nlp = English()
     nlp.add_pipe('sentencizer')
@@ -125,6 +165,7 @@ def get_sentences_spacy(text, min_len=5, lang='en'):
     text = text.replace('i.e.', 'iieeii')
     text = text.replace('\n', ' ').replace('\r', '')
     doc = nlp(text)
+
     def filter(s, min_len, lang):
         if len(s.split(' ')) < min_len:
             return False
@@ -141,6 +182,7 @@ def get_sentences_spacy(text, min_len=5, lang='en'):
     sentences = [transform(s.text) for s in doc.sents if filter(s.text.strip(), min_len, lang)]
     return sentences
 
+
 def get_sentences(text, min_len=5, lang='en', backend='spacy'):
     if not lang == 'en':
         raise Exception('Only english supported at the moment.')
@@ -149,6 +191,7 @@ def get_sentences(text, min_len=5, lang='en', backend='spacy'):
     if backend == 'nltk':
         return get_sentences_nltk(text, min_len, lang)
     raise Exception(f'Backend {backend} not supported.')
+
 
 def get_sentences_nltk(text, min_len=5, lang='en', split_lists=False):
     text = text.replace('e.g.', 'eeggee')
@@ -184,9 +227,11 @@ def get_sentences_nltk(text, min_len=5, lang='en', split_lists=False):
     sentences = [transform(s) for s in sentences if filter(s.strip(), min_len, lang)]
     return sentences
 
+
 def isItemized(text):
     list_pattern = re.compile(r'(?:\d+\.|[IVX]+[.)]|[ivx]+[.)]|\([a-z]\)|\s*[a-z]\))')
     return bool(list_pattern.match(text))
+
 
 def split_itemized_sentence(text):
     def filter(s):
