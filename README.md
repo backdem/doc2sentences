@@ -25,6 +25,16 @@ The command overwrite will overwrite the output file if it already exists.
 python doc2sentences/d2s.py --inputfile /tmp/test.pdf --outputfile /tmp/test.csv --columns label1,label2 --overwrite
 ```
 
+## Using OCR
+
+Some PDF documents are problematic to extract text. For these documents you can try using Optical Character Reader (OCR). 
+This can be done using the --ocr flag. OCR will only be used if normal text extraction from PDF does not work. 
+N.B. This process if very error prone some characters are not recognized resulting in wrong words recognized. 
+
+```console
+python doc2sentences/d2s.py --inputfile /tmp/test.pdf --outputfile /tmp/test.csv --ocr
+```
+
 ## Installation as package
 
 To install doc2sentences from GitHub repository, do:
