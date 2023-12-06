@@ -8,6 +8,10 @@ def main():
                         help='overwrite output file.')
     parser.add_argument('--ocr', action='store_true',
                         help='try ocr extraction if text extraction fails.')
+    parser.add_argument('--chunk', action='store_true',
+                        help='try semantically chuinks sentences togather using gpt LLM.')
+    parser.add_argument('--maxtokens', nargs='?', default=300,
+                        help='set max_tokens for chunking algorithm.')
     parser.add_argument('--language', nargs='?', default='en',
                         help='test text for language e.g. "en" for english.')
     parser.add_argument('--inputfile', nargs='?', default=None,
@@ -53,6 +57,9 @@ def main():
         return
 
     sentences = d2s.get_sentences(text, min_len=5, lang='en', backend='spacy')
+
+    if args.chunk:
+        sentences = d2s.chunk_sentences(sentences, int(args.maxtokens))
 
     columns = []
     if args.columns:

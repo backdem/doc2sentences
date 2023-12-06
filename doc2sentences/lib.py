@@ -1,17 +1,20 @@
 import os
 import csv
 import fitz as PyMuPDF
-from PIL import Image
 import pytesseract
-from language_tool_python import LanguageTool
 import nltk
 import datetime
 import re
 import spacy
-from spacy.lang.en import English
 import langid
-from striprtf.striprtf import rtf_to_text
 import chardet
+
+from PIL import Image
+from language_tool_python import LanguageTool
+from semantic_text_splitter import TiktokenTextSplitter
+from striprtf.striprtf import rtf_to_text
+from spacy.lang.en import English
+
 nlp = spacy.load("en_core_web_sm")
 
 nltk.download('punkt')
@@ -26,6 +29,14 @@ def get_file_extension(file_path):
     _, file_extension = os.path.splitext(file_path)
     return file_extension.lower()
 
+
+def chunk_sentences(sentences, max_tokens, model="gpt-4-1106-preview"):
+    # Join senteces with newline
+    all_text = '\n'.join(sentences)
+    splitter = TiktokenTextSplitter(model, trim_chunks=False)
+    chunks = splitter.chunks(all_text, max_tokens)
+    chunks = [c.replace('\n','').strip() for c in chunks]
+    return chunks
 
 def extract_pdf_metadata(file_path):
     # Open the PDF file
