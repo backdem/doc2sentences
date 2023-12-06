@@ -35,6 +35,16 @@ N.B. This process if very error prone some characters are not recognized resulti
 python doc2sentences/d2s.py --inputfile /tmp/test.pdf --outputfile /tmp/test.csv --ocr
 ```
 
+## Semantically grouping sentences
+
+In some scenarios sentences do no capture enough semantics. d2s can use GPT LLM models to group 
+consecutive sentences together semantically. This can be done with the --chunk option with --maxtokens indicating 
+the size of the chunk.
+
+```console
+python doc2sentences/d2s.py --inputfile /tmp/test.pdf --outputfile /tmp/test.csv --chunk --maxtokens 100
+```
+
 ## Installation as package
 
 To install doc2sentences from GitHub repository, do:
